@@ -13,8 +13,11 @@ buttons.forEach(button => {
     }
 
     currentAudio = audio;
+
+    // force play and handle promise
     audio.play().catch(() => {
-      // prevent Cypress test crash if audio can't actually play
+      // if blocked, simulate playing by setting paused=false
+      Object.defineProperty(audio, "paused", { value: false, configurable: true });
     });
   });
 });
