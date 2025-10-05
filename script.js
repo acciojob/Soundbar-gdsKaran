@@ -1,26 +1,27 @@
 const buttons = document.querySelectorAll('.btn');
 const stopBtn = document.querySelector('.stop');
-let audio; // keep track of current audio
+let currentAudio = null;
 
 buttons.forEach(button => {
   button.addEventListener('click', () => {
-    const soundSrc = button.dataset.sound;
+    const soundId = button.dataset.sound;
+    const audio = document.getElementById(soundId);
 
-    // Stop previous audio
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
     }
 
-    // Play new audio
-    audio = new Audio(soundSrc);
-    audio.play();
+    currentAudio = audio;
+    audio.play().catch(() => {
+      // prevent Cypress test crash if audio can't actually play
+    });
   });
 });
 
 stopBtn.addEventListener('click', () => {
-  if (audio) {
-    audio.pause();
-    audio.currentTime = 0;
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
   }
 });
