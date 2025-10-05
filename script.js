@@ -1,44 +1,26 @@
-//your JS code here. If required.
-const sounds = ['applause', 'boo', 'gasp', 'tada', 'victory', 'wrong']; // example sounds
+const buttons = document.querySelectorAll('.btn');
+const stopBtn = document.querySelector('.stop');
+let audio; // keep track of current audio
 
-const buttonsDiv = document.getElementById('buttons');
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    const soundSrc = button.dataset.sound;
 
-// create a button for each sound
-sounds.forEach(sound => {
-  const btn = document.createElement('button');
-  btn.classList.add('btn');
-  btn.innerText = sound;
+    // Stop previous audio
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
 
-  btn.addEventListener('click', () => {
-    stopSounds();
-    const audio = new Audio(`./sounds/${sound}.mp3`);
+    // Play new audio
+    audio = new Audio(soundSrc);
     audio.play();
-    currentAudio = audio;
   });
-
-  buttonsDiv.appendChild(btn);
 });
-
-// create stop button
-const stopBtn = document.createElement('button');
-stopBtn.classList.add('stop');
-stopBtn.innerText = 'Stop';
-
-let currentAudio = null;
 
 stopBtn.addEventListener('click', () => {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
+  if (audio) {
+    audio.pause();
+    audio.currentTime = 0;
   }
 });
-
-buttonsDiv.appendChild(stopBtn);
-
-// helper function to stop all sounds
-function stopSounds() {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-  }
-}
